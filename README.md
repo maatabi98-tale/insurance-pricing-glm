@@ -1,29 +1,28 @@
-# Glass Breakage Insurance Pricing: GLM Frequency-Severity Framework
+# Predictive Modeling for Insurance Pricing: GLM Frequency-Severity Architecture
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Statsmodels](https://img.shields.io/badge/Statsmodels-0.14%2B-green)
 ![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-lightgrey)
 
 ## Context and Objective
-This repository contains a quantitative pricing framework for a motor insurance glass breakage guarantee. The objective is to estimate the pure premium relying on empirical policyholder and claims datasets, utilizing a standard frequency-severity actuarial approach.
+This repository deploys a quantitative actuarial pricing engine for a motor insurance guarantee (glass breakage). The architecture leverages empirical policyholder exposure and claims datasets to compute the theoretical pure premium using a decoupled frequency-severity framework.
 
 ## Mathematical Methodology
-The pricing engine models claim counts and claim costs independently using Generalized Linear Models (GLMs):
-*   **Frequency Model:** Assumes claim counts follow a Poisson distribution. The systematic component utilizes a logarithmic link function, incorporating the logarithm of the risk-exposure (`log_RA`) as an offset variable to normalize heterogeneous policy durations.
-*   **Severity Model:** Assumes strictly positive claim costs follow a Gamma distribution with a constant coefficient of variation. A logarithmic link function is applied to ensure strictly positive cost predictions.
-*   **Collinearity Diagnostics:** Cramer's V statistic is computed pairwise among categorical covariates to detect structural multicollinearity prior to model fitting.
-*   **Pure Premium:** Derived under the assumption of independence between frequency and severity as $\mathbb{E}[PP] = \mathbb{E}[Frequency] \times \mathbb{E}[Severity]$. 
+The pricing algorithm models claim counts and costs via independent Generalized Linear Models (GLM) belonging to the Exponential Dispersion Family (EDF):
+*   **Frequency Model:** Assumes claim counts follow a Poisson distribution. The systematic component utilizes a logarithmic link function. To account for heterogeneous policy durations, the logarithm of the risk exposure ($RA$, Risques-Années) is strictly enforced as an offset variable.
+*   **Severity Model:** Assumes strictly positive claim costs follow a Gamma distribution, characterized by a constant coefficient of variation. A logarithmic link function ensures non-negative cost predictions.
+*   **Multicollinearity Diagnostics:** Cramer's V statistic is evaluated pairwise across the categorical feature space (e.g., driver age vs. license seniority) to isolate and eliminate linearly dependent covariates prior to structural calibration.
+*   **Pure Premium:** Derived under the assumption of stochastic independence between frequency and severity: $\mathbb{E}[PP] = \mathbb{E}[Frequency] \times \mathbb{E}[Severity]$.
 
-## Project Architecture
+## Directory Architecture
 ```text
 ├── data/
-│   ├── raw/                 # Raw policyholder (base_freq.csv) and claims (base_cout.csv) datasets
-│   └── processed/           # Model outputs and coefficient tables
+│   ├── raw/                 # Ingestion point for base_freq.csv and base_cout.csv
+│   └── processed/           # Output directory for calibrated parameter vectors
 ├── src/
 │   ├── __init__.py
-│   ├── glm_pricing.py       # Core OOP GLM estimation engine
-│   └── diagnostics.py       # Statistical testing and Cramer's V logic
-├── notebooks/
-│   └── 01_exploratory_analysis.ipynb
+│   └── glm_engine.py        # Core OOP GLM estimation and inference engine
+├── scripts/
+│   └── visualizations.py    # Analytical plotting for tariff relativities
 ├── requirements.txt
 └── README.md
