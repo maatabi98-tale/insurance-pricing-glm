@@ -4,8 +4,6 @@
 ![Statsmodels](https://img.shields.io/badge/Statsmodels-0.14%2B-green)
 ![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-lightgrey)
 ![SAS]
-ظ
-
 ## Context and Objective
 This repository deploys a quantitative actuarial pricing engine for a motor insurance guarantee (glass breakage). The architecture leverages empirical policyholder exposure and claims datasets to compute the theoretical pure premium using a decoupled frequency-severity framework.
 It features a modern Python (Statsmodels) OOP refactoring of a legacy actuarial pricing engine originally developed in SAS. The original SAS PROC GENMOD routines and collinearity diagnostics are preserved in the legacy_sas/ directory for mathematical audit and equivalence verification.
